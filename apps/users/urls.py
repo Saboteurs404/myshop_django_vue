@@ -9,4 +9,5 @@ urlpatterns = [
     path('user_reg/',views.user_reg),
     path('user_login/',views.user_login),
     path('ajax_login_data/',views.ajax_login_data),
+    path('index/',views.index),
 ]
