@@ -57,3 +57,37 @@ class GoodsCategoryAddView(View):
             errors = form_obj.errors
             print(errors)
             return render(request, "shop/goods/cate_add.html", {'form_obj': form_obj, 'info': errors})
+
+
+def ajax_goods(request):
+    cate_id = request.GET.get("cate_id","")
+    goodname = request.GET.get('goodname','')
+    status = request.GET.get('status')
+
+    search_dict = dict()
+    if cate_id:
+        search_dict['category'] = cate_id
+    if goodname:
+        search_dict['name__contains']=goodname
+    if status:
+        search_dict['status'] = status
+
+    page_size=2
+    page=int(request.GET["page"])
+    # 获取总数count
+    total = Goods.objects.filter(**search_dict).count()
+    # 通过切片获取当前页和下一页的数据
+    goods = Goods.objects.filter(**search_dict).order_by('-id')[(page-1)*page_size : page*page_size]
+    rows = []
+    datas={"total":total,'rows':rows}
+    for good in goods:
+        rows.append({
+            "id":good.id,
+            'name':good.name,
+            'market_price':good.market_price,
+            'price':good.price,
+            'category_id':good.category.name,
+            'click_num':good.click_num,
+            'amount':good.amount,
+        })
+    return JsonResponse(datas, safe=False,json_dumps_params={'ensure_ascii':False,'indent':4})

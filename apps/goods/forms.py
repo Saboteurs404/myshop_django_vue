@@ -32,7 +32,7 @@ class GoodsCategoryForm(forms.Form):
                 error_messages={
                     'required':'请选择父类',
                 })
-    sort = forms.CharField(label='paixu', required=True,
+    sort = forms.CharField(label='排序', required=True,
                 widget=forms.widgets.TextInput(
                     attrs={
                         'class':'form-control',

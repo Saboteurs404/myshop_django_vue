@@ -25,5 +25,5 @@ urlpatterns = [
     path('users/',include('apps.users.urls')),
     # path('ckeditor/',include('ckeditor_uploader.urls')),
     # re_path('media/(?P<path>.*)', serve, {"document_root": settings.MEDIA_ROOT}),
-    # re_path('static/(?P<path>.*)', serve, {"document_root": settings.STATIC_ROOT}),
+    # re_path('static/(?P<p ath>.*)', serve, {"document_root": settings.STATIC_ROOT}),
 ]
