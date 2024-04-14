@@ -58,6 +58,75 @@ class GoodsCategoryAddView(View):
             print(errors)
             return render(request, "shop/goods/cate_add.html", {'form_obj': form_obj, 'info': errors})
 
+class GoodsView(View):
+    def __init__(self):
+        self.alist = {}
+
+    def binddata(self,datas,id,n):
+        datas = GoodsCategory.objects.filter(parent_id=id)
+        for data in datas:
+            self.alist[data.id] = self.spacelength(n) + data.name
+            self.binddata(datas,data.id,n+2)
+        return self.alist
+
+    def spacelength(self,i):
+        space = ''
+        for j in range(1,i):
+            space += '&nbsp;&nbsp;'
+        return space + '|--'
+
+    def get(self,request):
+        cates_all = GoodsCategory.objects.all()
+        cates = self.binddata(cates_all,0,1)
+        return render(request,'shop/goods/index.html',{"cates":cates})
+
+    def post(self, request):
+        pass
+
+
+
+class GoodsAddView(View):
+    def __init__(self):
+        self.alist={}
+
+    def binddata(self,datas,id,n):
+        if id==0:
+            datas=GoodsCategory.objects.filter(parent__isnull = True)
+        else:
+            datas=GoodsCategory.objects.filter(parent_id = id)
+        for data in datas:
+            self.alist[data.id]=self.spacelength(n)+data.name
+            self.binddata(datas,data.id,n+2)
+        return self.alist
+
+    def spacelength(self,i):
+        space=''
+        for j in range(1,i):
+            space+="&nbsp;&nbsp;"
+        return space+"|--"
+
+    def get(self,request):
+        cates_all=GoodsCategory.objects.all()
+        cates=self.binddata(cates_all,0,1)
+        return render(request,"shop/goods/add.html",{"cates":cates})
+
+    def post(self,request):
+        name=request.POST.get("name",'')
+        parent_id=request.POST.get("parent_id",'')
+        market_price=request.POST.get("market_price",'0')
+        price=request.POST.get("price",'0')
+        goods_desc=request.POST.get("goods_desc",'')
+        main_img=request.POST.get("main_img",'')
+        message="字段需要填写"
+        if not name:
+            message="请输入姓名"
+
+
+        #return render(request, 'login/login.html', {"message": message})
+        #print(name)
+        return redirect(reverse('index'))
+
+
 
 def ajax_goods(request):
     cate_id = request.GET.get("cate_id","")

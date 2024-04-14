@@ -44,6 +44,9 @@ INSTALLED_APPS = [
     'apps.users', #? 用户应用
     'ckeditor',  #? 富文本编辑器
     'ckeditor_uploader',  #? 富文本编辑器上传图片模块
+    'rest_framework',
+    'app8',
+    'rest_framework_swagger', # 使用swagger让接口文档更专业
 ]
 
 MIDDLEWARE = [
@@ -185,5 +188,11 @@ CKEDITOR_CONFIGS = {
         ),
         'width': 'auto',
     },
+}
+
+#TODO 利用DRF生成接口文档
+REST_FRAMEWORK = {
+    # 否则会提示 ‘AutoSchema’ object has no attribute 'get_link'
+    'DEFAULT_SCHEMA_CLASS':'rest_framework.schemas.coreapi.AutoSchema'
 }
 
